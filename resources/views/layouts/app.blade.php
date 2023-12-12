@@ -6,9 +6,10 @@
 
         <title>Pagani</title>
         @vite('resources/css/app.css')
+        @vite('resources/js/app.js')
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
 
     </head>
     <body class="bg-gray-100">
@@ -17,8 +18,51 @@
             <h1 class="text-3xl font-black text-black">
                 Pagani Automobili
             </h1>
-            <a href="" class="font-bold mr-3">LOGIN</a>
-            <a href="{{route('register')}}" class="font-bold">CREAR CUENTA</a>
+
+           
+            {{-- Verificamos si un usuario esta autenticado --}}
+            @auth()
+                <nav class="flex gap-2 justify-end text-2xl">
+                    <a class="flex items-center gap-2 bg-white border hover:bg-slate-300 p-2 text-gray-600 rounded text-sm uppsercase font-bold cursor-pointer" href="{{route('post.create')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                          </svg>
+                          
+                        Crear
+                    </a>
+                    <div class="flex">
+                        <a class="font-bold uppsercase text-gray-600 mr-7" href="{{ route('post.index', auth()->user()->username) }}">
+                            Hola <span class="font-bold">{{ auth()->user()->username}}</span>
+                        </a>
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button type="submit" class="font-bold uppercase text-gray-600">
+                                Cerrar Sesion
+                            </button>
+                        </form>
+                    </div>
+                </nav>
+            @endauth
+
+            {{-- Verificamos si un usuario esta autenticado
+            @if(auth()->check())
+                <p>Autenticado</p>
+            @else
+                <p>No autenticado</p>
+            @endif La forma anterior es como lo hacíamos hace algún tiempo, pero laravel nos ofrece una ayuda o
+            helper llamada @auth la cual nos ahorra tiempo y se usa asi: @auth <p>Autenticado</p> @endauth --}}
+
+            @guest()
+                <nav class="flex gap-2 items-center">
+                    <a class="font-bold uppsercase text-gray-600" href="{{ route('login')}}">LOGIN</a>
+                    <a class="font-bold uppsercase text-gray-600" href="{{ route('register')}}">
+                        CREAR CUENTA
+                    </a>
+                </nav>
+            @endguest
+
+
         </header>
         <main class="container mx-auto mt-10">
             <h2 class="font-black text-center text-3xl mb-10">
